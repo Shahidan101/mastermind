@@ -23,35 +23,14 @@ Shahidan
 #######################################################################################################################################
 */
 
-
-/*
-#######################################################################################################################################
-Mental Notes go here:
-- How does the game work again?
-	- Random number generated at the start
-	- User tries to guess the number
-	- Game will inform if the number guessed is far, close, or correct
-- Ranges for far and close?
-	- Close is 1 number diff
-	- Far is...far
-- Range of numbers to be guessed?
-	- Oh yes, 1 to 10? We'll see how easy it is and modify accordingly
-- How many rounds?
-	- Player can choose 3, 5, or 10 rounds to play
-- Difficulty?
-	- Easy --> 5 chances to guess
-	- Intermediate --> 3 chances to guess
-	- Hard --> 1 chance to guess
-#######################################################################################################################################
-*/
-
 // Declaring necessary libraries
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 int getRandom(int lower, int upper);
-const char* playerInfo();
+void playerInfo(char* str);
 void startGame();
 
 int getRandom(int lower, int upper) {
@@ -62,8 +41,8 @@ int getRandom(int lower, int upper) {
 	return num;
 }
 
-const char* playerInfo() {
-	char *name;
+void playerInfo(char* str) {
+	char name[50];
 
 	printf("Hi there, welcome to Mastermind!\n");
 	printf("\nHOW THE GAME WORKS:\n");
@@ -74,9 +53,9 @@ const char* playerInfo() {
 	printf("#########################################\n");
 	printf("Before we start, we want to get to know you better~!\n\n");
 	printf("Name: ");
-	fgets(name, sizeof(name), stdin);
+	scanf("%s", name);
 
-	return name;
+	strcpy(str, name);
 }
 
 void startGame() {
@@ -91,7 +70,6 @@ void startGame() {
 	srand(time(0));
 
 	answer = getRandom(1, 10);
-	printf("%d\n", answer);
 
 	while ((difficultySelect < 1) || (difficultySelect > 3)) {
 		printf("Select your difficulty : \n");
@@ -136,19 +114,22 @@ void startGame() {
 
 int main(void) {
 	char reply;
+	char playerName[50];
+	int countgame = -1;
 
 	reply = 'Y';
 
 	system("clear");
-	const char* playername = playerInfo();
+
+	playerInfo(playerName);
 
 	while ((reply == 'Y') || (reply == 'y')) {
 		system("clear");
+		countgame += 1;
 		startGame();	
 		while (1) {
-			printf("Want to play again? [Y/N]\n");
+			printf("Want to play again, %s? [Y/N]\n", playerName);
 			scanf(" %c", &reply);
-			printf("%c", reply);
 			if ((reply == 'Y') || (reply == 'N') || (reply == 'y') || (reply == 'n'))
 				break;
 		}
@@ -156,7 +137,7 @@ int main(void) {
 		switch(reply) {
 			case 'N':
 			case 'n':
-				printf("\nThank you for playing!\n");
+				printf("\nThank you for playing, %s!\n", playerName);
 				break;
 		}
 	}
